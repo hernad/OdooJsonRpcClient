@@ -18,6 +18,15 @@ class SingleObserverEx<T> : SingleObserver<T> {
         this.subscribe.invoke(disposable)
     }
 
+    //override fun onSuccess(response: T) {
+    //    this.success.invoke(response)
+    //}
+
+    override fun onSuccess(response: T & Any) {
+        //TODO("Not yet implemented")
+        this.success.invoke(response)
+    }
+
     private var success: ((response: T) -> Unit) = {
         Timber.d("onSuccess() called: response is $it")
     }
@@ -26,9 +35,7 @@ class SingleObserverEx<T> : SingleObserver<T> {
         this.success = success
     }
 
-    override fun onSuccess(response: T) {
-        this.success.invoke(response)
-    }
+
 
     private var error: ((error: Throwable) -> Unit) = {
         Timber.e("onError() called: ${it::class.java.simpleName}: ${it.message}")

@@ -18,17 +18,25 @@ class ObserverEx<T> : Observer<T> {
         this.subscribe.invoke(disposable)
     }
 
-    private var next: ((t: T) -> Unit) = {
-        Timber.d("onNext() called: response is $it")
-    }
-
     fun onNext(next: (t: T) -> Unit) {
         this.next = next
     }
 
-    override fun onNext(t: T) {
-        this.next.invoke(t)
+    //override fun onNext(t: T) {
+    //    this.next.invoke(t)
+    //}
+
+
+    override fun onNext(next: T & Any) {
+        TODO("Not yet implemented")
     }
+
+    private var next: ((t: T) -> Unit) = {
+        Timber.d("onNext() called: response is $it")
+    }
+
+
+
 
     private var error: ((error: Throwable) -> Unit) = {
         Timber.e("onError() called: ${it::class.java.simpleName}: ${it.message}")

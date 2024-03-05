@@ -16,7 +16,7 @@ data class OdooUser(
     var isSuperUser: Boolean = false,
     var id: Int = 0,
     var name: String = "",
-    var imageSmall: String = "",
+    var image512: String = "",
     var partnerId: Int = 0,
     var context: JsonObject = JsonObject(),
     var isActive: Boolean = false,

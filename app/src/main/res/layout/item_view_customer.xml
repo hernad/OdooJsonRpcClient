@@ -40,7 +40,7 @@
             tools:text="Aliasgar Vadivala Aliasgar"/>
 
     <TextView
-            android:id="@+id/parent_name"
+            android:id="@+id/parentName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"

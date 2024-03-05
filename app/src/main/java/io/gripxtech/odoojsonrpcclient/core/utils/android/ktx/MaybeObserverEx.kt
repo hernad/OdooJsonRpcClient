@@ -18,6 +18,14 @@ class MaybeObserverEx<T> : MaybeObserver<T> {
         this.subscribe.invoke(disposable)
     }
 
+    //override fun onSuccess(response: T) {
+    //    this.success.invoke(response)
+    //}
+
+    override fun onSuccess(t: T & Any) {
+        this.success.invoke(t)
+    }
+
     private var success: ((response: T) -> Unit) = {
         Timber.d("onSuccess() called: response is $it")
     }
@@ -26,9 +34,6 @@ class MaybeObserverEx<T> : MaybeObserver<T> {
         this.success = success
     }
 
-    override fun onSuccess(response: T) {
-        this.success.invoke(response)
-    }
 
     private var error: ((error: Throwable) -> Unit) = {
         Timber.e("onError() called: ${it::class.java.simpleName}: ${it.message}")

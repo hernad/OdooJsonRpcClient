@@ -52,6 +52,10 @@ data class AuthenticateResult(
         var name: String = "",
 
         @Expose
+        @SerializedName("email")
+        var email: String = "",
+
+        @Expose
         @SerializedName("server_version_info")
         var serverVersionInfo: JsonArray = JsonArray(),
 
@@ -75,7 +79,7 @@ data class AuthenticateResult(
         @SerializedName("web_tours")
         var webTours: JsonArray = JsonArray(),
 
-        var imageSmall: String = "",
+        var image512: String = "",
         var password: String = ""
 ) {
     val androidName: String
@@ -94,7 +98,7 @@ data class AuthenticateResult(
             putString("id", uid.toString())
             putString("partnerId", partnerId.toString())
             putString("name", name)
-            putString("imageSmall", imageSmall)
+            putString("image512", image512)
             putString("context", userContext.toString())
             putString("active", "false")
         }

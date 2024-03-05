@@ -6,15 +6,19 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.gripxtech.odoojsonrpcclient.R
 import io.gripxtech.odoojsonrpcclient.core.utils.recycler.RecyclerBaseAdapter
+import io.gripxtech.odoojsonrpcclient.core.utils.recycler.entities.ErrorViewHolder
 import io.gripxtech.odoojsonrpcclient.customer.entities.Customer
+import io.gripxtech.odoojsonrpcclient.databinding.FragmentCustomerBinding
+import io.gripxtech.odoojsonrpcclient.databinding.ItemViewCustomerBinding
+import io.gripxtech.odoojsonrpcclient.databinding.ItemViewRecyclerErrorBinding
 import io.gripxtech.odoojsonrpcclient.trimFalse
-import kotlinx.android.synthetic.main.fragment_customer.*
-import kotlinx.android.synthetic.main.item_view_customer.view.*
+//import kotlinx.android.synthetic.main.fragment_customer.*
+//import kotlinx.android.synthetic.main.item_view_customer.view.*
 
 class CustomerAdapter(
     private val fragment: CustomerFragment,
     items: ArrayList<Any>
-) : RecyclerBaseAdapter(items, fragment.rv) {
+) : RecyclerBaseAdapter(items, fragment.bindingFragmentCustomer.rv) {
 
     companion object {
         const val TAG: String = "CustomerAdapter"
@@ -25,20 +29,32 @@ class CustomerAdapter(
     private val rowItems: ArrayList<Customer> = ArrayList(
         items.filterIsInstance<Customer>()
     )
+    lateinit var bindingItemViewCustomer: ItemViewCustomerBinding
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomerViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        when (viewType) {
-            VIEW_TYPE_ITEM -> {
+        // https://stackoverflow.com/questions/60423596/how-to-use-viewbinding-in-a-recyclerview-adapter
+        bindingItemViewCustomer = ItemViewCustomerBinding.inflate(inflater, parent, false)
+
+
+        //when (viewType) {
+       //     VIEW_TYPE_ITEM -> {
+                /*
                 val view = inflater.inflate(
                     R.layout.item_view_customer,
                     parent,
                     false
                 )
                 return CustomerViewHolder(view)
-            }
-        }
-        return super.onCreateViewHolder(parent, viewType)
+                 */
+          //      val view = bindingItemViewCustomer.root
+          //      return CustomerViewHolder(view)
+
+        //  }
+        //}
+        //return super.onCreateViewHolder(parent, viewType)
+        return CustomerViewHolder(bindingItemViewCustomer.root)
     }
 
     override fun onBindViewHolder(baseHolder: RecyclerView.ViewHolder, basePosition: Int) {
@@ -49,7 +65,7 @@ class CustomerAdapter(
                 val holder = baseHolder as CustomerViewHolder
                 val item = items[position] as Customer
 
-                val imageSmall = item.imageSmall.trimFalse()
+                val imageSmall = item.image512.trimFalse()
                 val name = item.name.trimFalse()
 
                 fragment.glideRequests.asBitmap().load(
@@ -57,14 +73,14 @@ class CustomerAdapter(
                         Base64.decode(imageSmall, Base64.DEFAULT)
                     else
                         fragment.activity.app.getLetterTile(if (name.isNotEmpty()) name else "X")
-                ).dontAnimate().circleCrop().into(holder.itemView.imageSmall)
+                ).dontAnimate().circleCrop().into(bindingItemViewCustomer.imageSmall)
 
-                holder.itemView.name.text = name
-                holder.itemView.parent_name.text = item.parentName.trimFalse()
-                holder.itemView.email.text = item.email.trimFalse()
+                bindingItemViewCustomer.name.text = name
+                bindingItemViewCustomer.parentName.text = item.parentName.trimFalse()
+                bindingItemViewCustomer.email.text = item.email.trimFalse()
 
-                if (!holder.itemView.clRoot.hasOnClickListeners()) {
-                    holder.itemView.clRoot.setOnClickListener {
+                if (!bindingItemViewCustomer.clRoot.hasOnClickListeners()) {
+                    bindingItemViewCustomer.clRoot.setOnClickListener {
                         // val clickedPosition = holder.adapterPosition
                         // val clickedItem = items[clickedPosition] as Customer
                     }

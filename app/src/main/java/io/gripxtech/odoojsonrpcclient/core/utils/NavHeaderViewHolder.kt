@@ -6,10 +6,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.gripxtech.odoojsonrpcclient.App
-import io.gripxtech.odoojsonrpcclient.GlideRequests
+//import io.gripxtech.odoojsonrpcclient.GlideRequests
 import io.gripxtech.odoojsonrpcclient.R
 import io.gripxtech.odoojsonrpcclient.core.OdooUser
 import io.gripxtech.odoojsonrpcclient.trimFalse
+import com.bumptech.glide.RequestManager
 
 class NavHeaderViewHolder(
     view: View
@@ -21,11 +22,11 @@ class NavHeaderViewHolder(
     private val menuToggleImage: ImageView = view.findViewById(R.id.ivDropdown)
 
 
-    fun setUser(user: OdooUser, glideRequests: GlideRequests) {
+    fun setUser(user: OdooUser, glideRequests: RequestManager) {
         name.text = user.name
         email.text = user.login
-        if (user.imageSmall.trimFalse().isNotEmpty()) {
-            val byteArray = Base64.decode(user.imageSmall, Base64.DEFAULT)
+        if (user.image512.trimFalse().isNotEmpty()) {
+            val byteArray = Base64.decode(user.image512, Base64.DEFAULT)
             glideRequests
                 .asBitmap()
                 .load(byteArray)

@@ -1,5 +1,6 @@
 package io.gripxtech.odoojsonrpcclient
 
+import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
@@ -11,7 +12,10 @@ import io.gripxtech.odoojsonrpcclient.core.utils.BaseActivity
 import io.gripxtech.odoojsonrpcclient.core.utils.NavHeaderViewHolder
 import io.gripxtech.odoojsonrpcclient.core.utils.android.ktx.postEx
 import io.gripxtech.odoojsonrpcclient.customer.CustomerFragment
-import kotlinx.android.synthetic.main.activity_main.*
+//import kotlinx.android.synthetic.main.activity_main.*
+//import com.bumptech.glide.RequestManager
+import com.bumptech.glide.Glide
+import io.gripxtech.odoojsonrpcclient.databinding.ActivityMainBinding
 
 class MainActivity : BaseActivity() {
 
@@ -28,6 +32,8 @@ class MainActivity : BaseActivity() {
     lateinit var app: App private set
     private lateinit var drawerToggle: ActionBarDrawerToggle
     private lateinit var navHeader: NavHeaderViewHolder
+    // https://developer.android.com/topic/libraries/view-binding
+    lateinit var binding: ActivityMainBinding // activity_main.xml
 
     private var currentDrawerItemID: Int = 0
 
@@ -46,41 +52,50 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         app = application as App
-        setContentView(R.layout.activity_main)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
+        //setContentView(R.layout.activity_main)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        setSupportActionBar(tb)
+
+        //val tb = view.tb
+        //val dl = view.dl
+
+        setSupportActionBar(binding.tb)
 
         supportActionBar?.apply {
             setHomeButtonEnabled(true)
             setDisplayHomeAsUpEnabled(true)
         }
 
-        tb.setNavigationOnClickListener {
-            dl.openDrawer(GravityCompat.START)
+        binding.tb.setNavigationOnClickListener {
+            binding.dl.openDrawer(GravityCompat.START)
         }
         setTitle(R.string.app_name)
 
         drawerToggle = ActionBarDrawerToggle(
-            this, dl, tb,
+            this, binding.dl, binding.tb,
             R.string.navigation_drawer_open, R.string.navigation_drawer_close
         )
-        dl.addDrawerListener(drawerToggle)
+        binding.dl.addDrawerListener(drawerToggle)
         drawerToggle.syncState()
 
-        val view = nv.getHeaderView(0)
+        val view = binding.nv.getHeaderView(0)
         if (view != null) {
             navHeader = NavHeaderViewHolder(view)
             val user = getActiveOdooUser()
             if (user != null) {
-                navHeader.setUser(user, GlideApp.with(this@MainActivity))
+                navHeader.setUser(user, Glide.with(this@MainActivity))
             }
         }
 
-        nv.setNavigationItemSelectedListener { item ->
-            dl.postEx { closeDrawer(GravityCompat.START) }
+        binding.nv.setNavigationItemSelectedListener { item ->
+            binding.dl.postEx { closeDrawer(GravityCompat.START) }
             when (item.itemId) {
                 R.id.nav_customer -> {
                     if (currentDrawerItemID != ACTION_CUSTOMER) {
@@ -100,6 +115,7 @@ class MainActivity : BaseActivity() {
                     }
                     true
                 }
+
                 R.id.nav_settings -> {
                     startActivity(Intent(this, SettingsActivity::class.java))
                     true
@@ -110,9 +126,11 @@ class MainActivity : BaseActivity() {
             }
         }
 
+        /*
         if (savedInstanceState == null) {
             loadFragment(ACTION_CUSTOMER)
         }
+        */
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {

@@ -48,7 +48,7 @@ val gson: Gson by lazy {
     GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
 }
 
-fun Context.createOdooUser(authenticateResult: AuthenticateResult): Boolean {
+fun Context.createOdooUserInAndroidAccount(authenticateResult: AuthenticateResult): Boolean {
     val accountManager = AccountManager.get(this)
     val account = Account(authenticateResult.androidName, App.KEY_ACCOUNT_TYPE)
     val result = accountManager.addAccountExplicitly(
@@ -56,13 +56,13 @@ fun Context.createOdooUser(authenticateResult: AuthenticateResult): Boolean {
         authenticateResult.password.encryptAES(),
         authenticateResult.toBundle
     )
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         accountManager.notifyAccountAuthenticated(account)
-    }
+    //}
     return result
 }
 
-fun Context.getOdooUsers(): List<OdooUser> {
+fun Context.getOdooUsersFromAccountManager(): List<OdooUser> {
     val manager = AccountManager.get(this)
     val odooUsers = ArrayList<OdooUser>()
     manager.getAccountsByType(App.KEY_ACCOUNT_TYPE)
@@ -74,30 +74,36 @@ fun Context.getOdooUsers(): List<OdooUser> {
 }
 
 fun Context.odooUserByAndroidName(androidName: String): OdooUser? {
-    getOdooUsers()
+    getOdooUsersFromAccountManager()
         .filter { it.androidName == androidName }
         .forEach { return it }
     return null
 }
 
 fun Context.getActiveOdooUser(): OdooUser? {
-    getOdooUsers()
+    getOdooUsersFromAccountManager()
         .filter { it.isActive }
         .forEach { return it }
+
     return null
 }
 
-fun Context.loginOdooUser(odooUser: OdooUser): OdooUser? {
+fun Context.saveAutheticatedUserInAccountManager(odooUser: OdooUser): OdooUser? {
+    /*
+    var user: OdooUser? = null
     do {
-        val user = getActiveOdooUser()
+        user = getActiveOdooUser()
         if (user != null) {
             logoutOdooUser(user)
         }
     } while (user != null)
+    */
+
     val accountManager = AccountManager.get(this)
     accountManager.setUserData(odooUser.account, "active", "true")
 
-    return getActiveOdooUser()
+    return odooUser
+    //return getActiveOdooUser()
 }
 
 fun Context.logoutOdooUser(odooUser: OdooUser) {
@@ -115,7 +121,7 @@ fun Context.setCookies(odooUser: OdooUser, cookiesStr: String) {
     accountManager.setUserData(odooUser.account, "cookies", cookiesStr.encryptAES())
 }
 
-fun Context.deleteOdooUser(odooUser: OdooUser): Boolean {
+fun Context.deleteOdooUserFromAndroidAccount(odooUser: OdooUser): Boolean {
     val accountManager = AccountManager.get(this)
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
         accountManager.removeAccountExplicitly(odooUser.account)

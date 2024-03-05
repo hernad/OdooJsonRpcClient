@@ -1,12 +1,12 @@
 {
-  "formatVersion": 1,
+  "formatVersion": 2,
   "database": {
-    "version": 1,
+    "version": 2,
     "identityHash": "f4fe952ec8c0caf4a5693c1e972b8ac7",
     "entities": [
       {
         "tableName": "res.partner",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER NOT NULL, `server_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `email` TEXT NOT NULL, `company_name` TEXT NOT NULL, `parent_name` TEXT NOT NULL, `image_small` TEXT NOT NULL, `website` TEXT NOT NULL, `phone` TEXT NOT NULL, `mobile` TEXT NOT NULL, `full_address` TEXT NOT NULL, `state_id` TEXT NOT NULL, `country_id` TEXT NOT NULL, `comment` TEXT NOT NULL, `is_company` INTEGER NOT NULL, PRIMARY KEY(`_id`, `server_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER NOT NULL, `server_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `email` TEXT NOT NULL, `company_name` TEXT NOT NULL, `parent_name` TEXT NOT NULL, `image_512` TEXT NOT NULL, `website` TEXT NOT NULL, `phone` TEXT NOT NULL, `mobile` TEXT NOT NULL, `full_address` TEXT NOT NULL, `state_id` TEXT NOT NULL, `country_id` TEXT NOT NULL, `comment` TEXT NOT NULL, `is_company` INTEGER NOT NULL, PRIMARY KEY(`_id`, `server_id`))",
         "fields": [
           {
             "fieldPath": "_id",

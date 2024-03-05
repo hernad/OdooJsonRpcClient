@@ -99,7 +99,7 @@
                     android:id="@+id/tvServerURL"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="http://192.168.0.1:8069"/>
+                    tools:text="http://odoo.svc.bring.out.ba:8072"/>
 
             <Space
                     android:layout_width="wrap_content"

@@ -8,9 +8,17 @@ import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.gripxtech.odoojsonrpcclient.R
+import io.gripxtech.odoojsonrpcclient.core.authenticator.ManageAccountViewHolder
 import io.gripxtech.odoojsonrpcclient.core.utils.recycler.entities.*
-import kotlinx.android.synthetic.main.item_view_recycler_empty.view.*
-import kotlinx.android.synthetic.main.item_view_recycler_error.view.*
+import io.gripxtech.odoojsonrpcclient.databinding.ActivityMainBinding
+import io.gripxtech.odoojsonrpcclient.databinding.ItemViewManageAccountBinding
+import io.gripxtech.odoojsonrpcclient.databinding.ItemViewRecyclerEmptyBinding
+import io.gripxtech.odoojsonrpcclient.databinding.ItemViewRecyclerErrorBinding
+import io.gripxtech.odoojsonrpcclient.databinding.ItemViewRecyclerLessBinding
+import io.gripxtech.odoojsonrpcclient.databinding.ItemViewRecyclerMoreBinding
+
+//import kotlinx.android.synthetic.main.item_view_recycler_empty.view.*
+//import kotlinx.android.synthetic.main.item_view_recycler_error.view.*
 
 
 abstract class RecyclerBaseAdapter(
@@ -71,43 +79,62 @@ abstract class RecyclerBaseAdapter(
     private var pvtLessListener: (() -> Unit)? = null
     private var pvtRetryListener: (() -> Unit)? = null
 
+    lateinit var bindingEmpty: ItemViewRecyclerEmptyBinding
+    lateinit var bindingError: ItemViewRecyclerErrorBinding
+    lateinit var bindingLess: ItemViewRecyclerLessBinding
+    lateinit var bindingMore: ItemViewRecyclerMoreBinding
+
     init {
         setupScrollListener(recyclerView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
+
+
         when (viewType) {
             VIEW_TYPE_EMPTY -> {
-                val view = inflater.inflate(
-                        R.layout.item_view_recycler_empty,
-                        parent,
-                        false
-                )
+                //val view = inflater.inflate(
+                //        R.layout.item_view_recycler_empty,
+                //        parent,
+                //        false
+                //)
+                //return EmptyViewHolder(view)
+                bindingEmpty = ItemViewRecyclerEmptyBinding.inflate(inflater)
+                val view = bindingEmpty.root
                 return EmptyViewHolder(view)
             }
             VIEW_TYPE_ERROR -> {
-                val view = inflater.inflate(
-                        R.layout.item_view_recycler_error,
-                        parent,
-                        false
-                )
+                //val view = inflater.inflate(
+                //        R.layout.item_view_recycler_error,
+                //        parent,
+                //        false
+                //)
+                //return ErrorViewHolder(view)
+                bindingError = ItemViewRecyclerErrorBinding.inflate(inflater)
+                val view = bindingError.root
                 return ErrorViewHolder(view)
             }
             VIEW_TYPE_LESS -> {
-                val view = inflater.inflate(
-                        R.layout.item_view_recycler_less,
-                        parent,
-                        false
-                )
+                //val view = inflater.inflate(
+                //        R.layout.item_view_recycler_less,
+                //        parent,
+                //        false
+                //)
+                //return LessViewHolder(view)
+                bindingLess = ItemViewRecyclerLessBinding.inflate(inflater)
+                val view = bindingLess.root
                 return LessViewHolder(view)
             }
             VIEW_TYPE_MORE -> {
-                val view = inflater.inflate(
-                        R.layout.item_view_recycler_more,
-                        parent,
-                        false
-                )
+                //val view = inflater.inflate(
+                //        R.layout.item_view_recycler_more,
+                //        parent,
+                //        false
+                //)
+                //return MoreViewHolder(view)
+                bindingMore = ItemViewRecyclerMoreBinding.inflate(inflater)
+                val view = bindingEmpty.root
                 return MoreViewHolder(view)
             }
         }
@@ -120,17 +147,17 @@ abstract class RecyclerBaseAdapter(
             VIEW_TYPE_EMPTY -> {
                 val holder = baseHolder as EmptyViewHolder
                 val item = items[position] as EmptyItem
-                holder.itemView.tvMessage.text = item.message
+                bindingEmpty.tvMessage.text = item.message
                 val drawableResId = item.drawableResId
                 if (drawableResId > 0) {
-                    holder.itemView.ivIcon.setImageResource(drawableResId)
+                    bindingEmpty.ivIcon.setImageResource(drawableResId)
                 }
             }
             VIEW_TYPE_ERROR -> {
                 val holder = baseHolder as ErrorViewHolder
                 val item = items[position] as ErrorItem
-                holder.itemView.tvCause.text = item.message
-                holder.itemView.bnRetry.setOnClickListener {
+                bindingError.tvCause.text = item.message
+                bindingError.bnRetry.setOnClickListener {
                     hideError()
                     pvtRetryListener?.invoke()
                 }

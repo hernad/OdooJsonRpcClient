@@ -12,6 +12,6 @@ class LocalePrefs(context: Context) : Prefs(LocalePrefs.TAG, context) {
     }
 
     var language: String
-        get() = getString(Language, ConfigurationCompat.getLocales(context.resources.configuration)[0].language)
+        get() = getString(Language, ConfigurationCompat.getLocales(context.resources.configuration)[0]!!.language)
         set(value) = putString(Language, value)
 }

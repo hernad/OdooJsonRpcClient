@@ -38,7 +38,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintStart_toEndOf="@+id/civImage"
                 app:layout_constraintTop_toBottomOf="@+id/tvName"
-                tools:text="http://192.168.0.1:8069"/>
+                tools:text="http://odoo.svc.bring.out.ba:8072"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/civDelete"

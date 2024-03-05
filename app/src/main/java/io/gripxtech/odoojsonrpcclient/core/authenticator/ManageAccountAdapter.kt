@@ -11,16 +11,17 @@ import io.gripxtech.odoojsonrpcclient.core.Odoo
 import io.gripxtech.odoojsonrpcclient.core.OdooUser
 import io.gripxtech.odoojsonrpcclient.core.utils.android.ktx.subscribeEx
 import io.gripxtech.odoojsonrpcclient.core.utils.recycler.RecyclerBaseAdapter
+import io.gripxtech.odoojsonrpcclient.databinding.ItemViewManageAccountBinding
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_manage_account.*
-import kotlinx.android.synthetic.main.item_view_manage_account.view.*
+//import kotlinx.android.synthetic.main.activity_manage_account.*
+//import kotlinx.android.synthetic.main.item_view_manage_account.view.*
 
 class ManageAccountAdapter(
     private val activity: ManageAccountActivity,
     items: ArrayList<Any>
-) : RecyclerBaseAdapter(items, activity.rv) {
+) : RecyclerBaseAdapter(items, activity.binding.rv) {
 
     companion object {
         private const val VIEW_TYPE_ITEM = 0
@@ -30,15 +31,22 @@ class ManageAccountAdapter(
         items.filterIsInstance<OdooUser>()
     )
 
+    private lateinit var bindingItemViewManage: ItemViewManageAccountBinding
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
+
+        bindingItemViewManage = ItemViewManageAccountBinding.inflate(inflater)
+
         when (viewType) {
             VIEW_TYPE_ITEM -> {
-                val view = inflater.inflate(
-                    R.layout.item_view_manage_account,
-                    parent,
-                    false
-                )
+                val view = bindingItemViewManage.root
+
+                //val view = inflater.inflate(
+                //    R.layout.item_view_manage_account,
+                //    parent,
+                //    false
+                //)
                 return ManageAccountViewHolder(view)
             }
         }
@@ -53,7 +61,7 @@ class ManageAccountAdapter(
                 val holder = baseHolder as ManageAccountViewHolder
                 val item = items[position] as OdooUser
 
-                val imageSmall = item.imageSmall.trimFalse()
+                val imageSmall = item.image512.trimFalse()
                 val name = item.name.trimFalse()
 
                 activity.glideRequests.asBitmap().load(
@@ -61,9 +69,14 @@ class ManageAccountAdapter(
                         Base64.decode(imageSmall, Base64.DEFAULT)
                     else
                         activity.app.getLetterTile(if (name.isNotEmpty()) name else "X")
-                ).dontAnimate().circleCrop().into(holder.itemView.civImage)
-                holder.itemView.tvName.text = name
-                holder.itemView.tvHost.text = item.host
+                ).dontAnimate().circleCrop().
+                   into(bindingItemViewManage.civImage)
+                //into(holder.itemView.civImage)
+
+                //holder.itemView.tvName.text = name
+                //holder.itemView.tvHost.text = item.host
+                bindingItemViewManage.tvName.text = name
+                bindingItemViewManage.tvHost.text = item.host
 
                 val loginDrawable = ContextCompat
                     .getDrawable(activity, R.drawable.ic_done_all_white_24dp)
@@ -72,20 +85,26 @@ class ManageAccountAdapter(
                 val deleteDrawable = ContextCompat
                     .getDrawable(activity, R.drawable.ic_close_white_24dp)
 
-                holder.itemView.civLogin.setImageDrawable(loginDrawable)
-                holder.itemView.civLogout.setImageDrawable(logoutDrawable)
-                holder.itemView.civDelete.setImageDrawable(deleteDrawable)
+                //holder.itemView.civLogout.setImageDrawable(logoutDrawable)
+                //holder.itemView.civLogin.setImageDrawable(loginDrawable)
+                //holder.itemView.civDelete.setImageDrawable(deleteDrawable)
+                bindingItemViewManage.civLogin.setImageDrawable(loginDrawable)
+                bindingItemViewManage.civLogout.setImageDrawable(logoutDrawable)
+                bindingItemViewManage.civDelete.setImageDrawable(deleteDrawable)
 
                 val activeUser = activity.getActiveOdooUser()
                 if (activeUser != null && item == activeUser) {
-                    holder.itemView.civLogin.visibility = View.GONE
-                    holder.itemView.civLogout.visibility = View.VISIBLE
+                    //holder.itemView.civLogin.visibility = View.GONE
+                    //holder.itemView.civLogout.visibility = View.VISIBLE
+                    bindingItemViewManage.civLogin.visibility = View.GONE
+                    bindingItemViewManage.civLogout.visibility = View.VISIBLE
                 } else {
-                    holder.itemView.civLogin.visibility = View.VISIBLE
-                    holder.itemView.civLogout.visibility = View.GONE
+                    //holder.itemView.civLogin.visibility = View.VISIBLE
+                    //holder.itemView.civLogout.visibility = View.GONE
                 }
 
-                holder.itemView.civLogin.setOnClickListener {
+                //holder.itemView.civLogin.setOnClickListener {
+                bindingItemViewManage.civLogin.setOnClickListener {
                     val clickedPosition = baseHolder.adapterPosition
                     val clickedItem = items[clickedPosition] as OdooUser
                     Odoo.user = clickedItem
@@ -97,14 +116,16 @@ class ManageAccountAdapter(
                     authenticate(user = clickedItem, dialog = dialog)
                 }
 
-                holder.itemView.civLogout.setOnClickListener {
+                //holder.itemView.civLogout.setOnClickListener {
+                bindingItemViewManage.civLogout.setOnClickListener {
                     val clickedPosition = baseHolder.adapterPosition
                     val clickedItem = items[clickedPosition] as OdooUser
                     Odoo.destroy {}
                     logoutUser(clickedItem)
                 }
 
-                holder.itemView.civDelete.setOnClickListener {
+                //holder.itemView.civDelete.setOnClickListener {
+                bindingItemViewManage.civDelete.setOnClickListener {
                     val clickedPosition = baseHolder.adapterPosition
                     val clickedItem = items[clickedPosition] as OdooUser
                     val clickedActiveUser = activity.getActiveOdooUser()
@@ -190,10 +211,10 @@ class ManageAccountAdapter(
 
     private fun loginUser(user: OdooUser) {
         Observable.fromCallable {
-            val result = activity.loginOdooUser(user)
+            val result = activity.saveAutheticatedUserInAccountManager(user)
             Odoo.user = user
             activity.app.cookiePrefs.setCookies(Odoo.pendingAuthenticateCookies)
-            Odoo.pendingAuthenticateCookies.clear()
+            //Odoo.pendingAuthenticateCookies.clear()
             result
         }
             .subscribeOn(Schedulers.io())
@@ -248,7 +269,7 @@ class ManageAccountAdapter(
 
     private fun deleteUser(user: OdooUser, activeOdooUser: OdooUser?, position: Int) {
         Observable.fromCallable {
-            activity.deleteOdooUser(user)
+            activity.deleteOdooUserFromAndroidAccount(user)
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

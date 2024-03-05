@@ -46,6 +46,7 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun checkUser() {
+
         val user = getActiveOdooUser()
         if (user != null) {
             Odoo.user = user
@@ -142,8 +143,8 @@ class SplashActivity : BaseActivity() {
 
     private fun logoutApp() {
         Single.fromCallable {
-            for (odooUser in getOdooUsers()) {
-                deleteOdooUser(odooUser)
+            for (odooUser in getOdooUsersFromAccountManager()) {
+                deleteOdooUserFromAndroidAccount(odooUser)
             }
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeEx {
             onSuccess {
@@ -166,7 +167,7 @@ class SplashActivity : BaseActivity() {
                 if (response.isSuccessful) {
                     val authenticate = response.body()!!
                     if (authenticate.isSuccessful) {
-                        createAccount(authenticateResult = authenticate.result, user = user)
+                        //createAndroidAccountAfterAuthentication(authenticateResult = authenticate.result, user = user)
                     } else {
                         // logoutOdooUser(user)
                         logoutApp()
@@ -188,17 +189,18 @@ class SplashActivity : BaseActivity() {
         }
     }
 
-    private fun createAccount(authenticateResult: AuthenticateResult, user: OdooUser) {
+    /*
+    private fun createAndroidAccountAfterAuthentication(authenticateResult: AuthenticateResult, user: OdooUser) {
         Observable.fromCallable {
-            deleteOdooUser(user)
-            if (createOdooUser(authenticateResult)) {
+            //deleteOdooUserFromAndroidAccount(user)
+            if (createOdooUserInAndroidAccount(authenticateResult)) {
                 val odooUser = odooUserByAndroidName(authenticateResult.androidName)
                 if (odooUser != null) {
-                    loginOdooUser(odooUser)
+                    saveAutheticatedUserInAccountManager(odooUser)
                     Odoo.user = odooUser
                     app.cookiePrefs.setCookies(Odoo.pendingAuthenticateCookies)
                 }
-                Odoo.pendingAuthenticateCookies.clear()
+                //Odoo.pendingAuthenticateCookies.clear()
                 true
             } else {
                 false
@@ -226,6 +228,7 @@ class SplashActivity : BaseActivity() {
                     }
                 }
     }
+    */
 
     private fun startLoginActivity() {
         startActivity(Intent(this@SplashActivity, LoginActivity::class.java))

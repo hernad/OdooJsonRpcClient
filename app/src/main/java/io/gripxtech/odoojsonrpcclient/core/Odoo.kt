@@ -70,6 +70,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import okhttp3.Cookie
 import retrofit2.Response
+import java.lang.Exception
 
 object Odoo {
 
@@ -95,7 +96,14 @@ object Odoo {
         }
 
     @Suppress("PlatformExtensionReceiverOfInline")
-    fun fromAccount(manager: AccountManager, account: Account) = OdooUser(
+    fun fromAccount(manager: AccountManager, account: Account): OdooUser {
+
+        var image512 = ""
+        try {
+            image512 = manager.getUserData(account, "image512")
+        } catch (e: Exception) { println(e.message) }
+
+     return OdooUser(
         Retrofit2Helper.Companion.Protocol.valueOf(
             manager.getUserData(account, "protocol")
         ),
@@ -108,12 +116,14 @@ object Odoo {
         manager.getUserData(account, "isSuperuser").toBoolean(),
         manager.getUserData(account, "id").toInt(),
         manager.getUserData(account, "name"),
-        manager.getUserData(account, "imageSmall"),
+        image512,
         manager.getUserData(account, "partnerId").toInt(),
         manager.getUserData(account, "context").toJsonObject(),
         manager.getUserData(account, "active").toBoolean(),
         account
-    )
+     )
+    }
+
 
     private val retrofit2Helper = Retrofit2Helper(
         protocol,

@@ -4,44 +4,58 @@ import android.os.Bundle
 import android.util.Base64
 import io.gripxtech.odoojsonrpcclient.*
 import io.gripxtech.odoojsonrpcclient.core.utils.BaseActivity
-import kotlinx.android.synthetic.main.activity_profile.*
+//import kotlinx.android.synthetic.main.activity_profile.*
+import com.bumptech.glide.RequestManager
+import com.bumptech.glide.Glide
+import io.gripxtech.odoojsonrpcclient.databinding.ActivityProfileBinding
+
 
 class ProfileActivity : BaseActivity() {
 
+    // https://bumptech.github.io/glide/doc/generatedapi.html
+
     private lateinit var app: App
-    lateinit var glideRequests: GlideRequests
+    lateinit var glideRequests: RequestManager
+    lateinit var binding: ActivityProfileBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+      super.onCreate(savedInstanceState)
+      binding = ActivityProfileBinding.inflate(layoutInflater)
+      val view = binding.root
+      setContentView(view)
+    }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         app = application as App
-        glideRequests = GlideApp.with(this)
+        glideRequests = Glide.with(this)
         setContentView(R.layout.activity_profile)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
 
         val user = getActiveOdooUser()
         if (user != null) {
-            val imageSmall = user.imageSmall.trimFalse()
+            val image512 = user.image512.trimFalse()
             val name = user.name.trimFalse()
 
             glideRequests.asBitmap().load(
-                if (imageSmall.isNotEmpty())
-                    Base64.decode(imageSmall, Base64.DEFAULT)
+                if (image512.isNotEmpty())
+                    Base64.decode(image512, Base64.DEFAULT)
                 else
                     app.getLetterTile(if (name.isNotEmpty()) name else "X")
-            ).circleCrop().into(ivProfile)
+            ).circleCrop().into(binding.ivProfile)
 
-            ctl.title = name
-            tvName.text = name
-            tvLogin.text = user.login
-            tvServerURL.text = user.host
-            tvDatabase.text = user.database
-            tvVersion.text = user.serverVersion
-            tvTimezone.text = user.timezone
+            binding.ctl.title = name
+            binding.tvName.text = name
+            binding.tvLogin.text = user.login
+            binding.tvServerURL.text = user.host
+            binding.tvDatabase.text = user.database
+            binding.tvVersion.text = user.serverVersion
+            binding.tvTimezone.text = user.timezone
         }
     }
 }

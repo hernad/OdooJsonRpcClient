@@ -29,7 +29,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="navigation_exit">Press again to exit</string>
     <string name="login_protocol">Protocol</string>
-    <string name="login_host_hint">Host (e.g. 192.168.0.1:8069)</string>
+    <string name="login_host_hint">Host (e.g. odoo.svc.bring.out.ba:8072)</string>
     <string name="login_host_error">Please, type host URL</string>
     <string name="login_host_error2">Please, type valid host URL</string>
     <string name="login_host_error1">Please, Remove leading http:// or https:// from host URL</string>

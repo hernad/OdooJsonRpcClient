@@ -14,7 +14,7 @@ import timber.log.Timber
 class App : MultiDexApplication() {
 
     companion object {
-        const val KEY_ACCOUNT_TYPE = "${BuildConfig.APPLICATION_ID}.auth"
+        var KEY_ACCOUNT_TYPE = "${BuildConfig.APPLICATION_ID}.auth"
     }
 
     private val letterTileProvider: LetterTileProvider by lazy {
@@ -33,8 +33,9 @@ class App : MultiDexApplication() {
         }
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration?) {
+    override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
+
         LocaleHelper.setLocale(this)
     }
 

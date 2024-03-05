@@ -18,7 +18,7 @@ import io.gripxtech.odoojsonrpcclient.core.utils.android.ktx.subscribeEx
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_settings.*
+//import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -38,15 +38,16 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         activity = getActivity() as SettingsActivity
-        addPreferencesFromResource(R.xml.preferences)
+        //addPreferencesFromResource(R.xml.preferences)
+        setPreferencesFromResource(R.xml.preferences, rootKey)
 
-        build = findPreference(getString(R.string.preference_build_key))
-        language = findPreference(getString(R.string.preference_language_key)) as ListPreference
-        logfile = findPreference(getString(R.string.preference_logfile_key))
-        organization = findPreference(getString(R.string.preference_organization_key))
-        privacy = findPreference(getString(R.string.preference_privacy_policy_key))
-        contact = findPreference(getString(R.string.preference_contact_key))
-        logout = findPreference(getString(R.string.preference_logout_key))
+        build = findPreference(getString(R.string.preference_build_key))!!
+        language = findPreference(getString(R.string.preference_language_key))!! // as ListPreference
+        logfile = findPreference(getString(R.string.preference_logfile_key))!!
+        organization = findPreference(getString(R.string.preference_organization_key))!!
+        privacy = findPreference(getString(R.string.preference_privacy_policy_key))!!
+        contact = findPreference(getString(R.string.preference_contact_key))!!
+        logout = findPreference(getString(R.string.preference_logout_key))!!
 
         build.summary = getString(R.string.preference_build_summary, BuildConfig.VERSION_NAME)
 
@@ -112,6 +113,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             true
         }
 
+
         contact.setOnPreferenceClickListener {
             val lclContext = context
             val url = ("mailto:" + getString(R.string.preference_contact_summary)
@@ -124,7 +126,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             } catch (e: Exception) {
                 e.printStackTrace()
                 Snackbar.make(
-                    activity.clRoot,
+                    activity.binding.clRoot,
                     R.string.preference_error_email_intent,
                     Snackbar.LENGTH_LONG
                 ).show()
@@ -135,8 +137,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         logout.setOnPreferenceClickListener {
             Single.fromCallable {
-                for (odooUser in activity.getOdooUsers()) {
-                    activity.deleteOdooUser(odooUser)
+                for (odooUser in activity.getOdooUsersFromAccountManager()) {
+                    activity.deleteOdooUserFromAndroidAccount(odooUser)
                 }
             }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeEx {
                 onSuccess {
@@ -151,6 +153,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             }
             true
         }
+
     }
 
     private fun emailIntent(address: Array<String>, cc: Array<String>, subject: String, body: String): Intent {

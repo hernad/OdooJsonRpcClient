@@ -18,10 +18,13 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_customer.*
-import kotlinx.android.synthetic.main.fragment_customer.tb
+//import kotlinx.android.synthetic.main.activity_main.*
+//import kotlinx.android.synthetic.main.fragment_customer.*
+//import kotlinx.android.synthetic.main.fragment_customer.tb
 import timber.log.Timber
+import com.bumptech.glide.RequestManager
+import com.bumptech.glide.Glide
+import io.gripxtech.odoojsonrpcclient.databinding.FragmentCustomerBinding
 
 class CustomerFragment : Fragment() {
 
@@ -44,7 +47,7 @@ class CustomerFragment : Fragment() {
     }
 
     lateinit var activity: MainActivity private set
-    lateinit var glideRequests: GlideRequests private set
+    lateinit var glideRequests: RequestManager private set
     private var compositeDisposable: CompositeDisposable? = null
 
     private var customerType: CustomerType = CustomerType.Customer
@@ -56,6 +59,7 @@ class CustomerFragment : Fragment() {
 
     private val customerListType = object : TypeToken<ArrayList<Customer>>() {}.type
     private val limit = RECORD_LIMIT
+    lateinit var bindingFragmentCustomer: FragmentCustomerBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,37 +68,48 @@ class CustomerFragment : Fragment() {
         compositeDisposable?.dispose()
         compositeDisposable = CompositeDisposable()
 
+        bindingFragmentCustomer = FragmentCustomerBinding.inflate(inflater, container, false)
+        //val view = bindingFragmentCustomer.root
+
+        //init()
+
+        //return super.onCreateView(inflater, container, savedInstanceState)
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_customer, container, false)
+        //return inflater.inflate(R.layout.fragment_customer, container, false)
+
+       // https://stackoverflow.com/questions/57117338/how-to-use-view-binding-in-android
+       return bindingFragmentCustomer.getRoot()
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity = getActivity() as MainActivity
-        glideRequests = GlideApp.with(this)
+        glideRequests = Glide.with(this)
         arguments?.let {
             customerType = CustomerType.valueOf(it.getString(TYPE) ?: "")
         }
 
         // Hiding MainActivity's AppBarLayout as well as NestedScrollView first
-        activity.abl.visibility = View.GONE
-        activity.nsv.visibility = View.GONE
+        activity.binding.abl.visibility = View.GONE
+        activity.binding.nsv.visibility = View.GONE
 
         when (customerType) {
             CustomerType.Supplier -> {
-                activity.nv.menu.findItem(R.id.nav_supplier).isChecked = true
+                activity.binding.nv.menu.findItem(R.id.nav_supplier).isChecked = true
                 activity.setTitle(R.string.action_supplier)
             }
             CustomerType.Company -> {
-                activity.nv.menu.findItem(R.id.nav_company).isChecked = true
+                activity.binding.nv.menu.findItem(R.id.nav_company).isChecked = true
                 activity.setTitle(R.string.action_company)
             }
             else -> {
-                activity.nv.menu.findItem(R.id.nav_customer).isChecked = true
+                activity.binding.nv.menu.findItem(R.id.nav_customer).isChecked = true
                 activity.setTitle(R.string.action_customer)
             }
         }
-        activity.setSupportActionBar(tb)
+        activity.setSupportActionBar(bindingFragmentCustomer.tb)
         val actionBar = activity.supportActionBar
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true)
@@ -102,24 +117,24 @@ class CustomerFragment : Fragment() {
         }
 
         drawerToggle = ActionBarDrawerToggle(
-            activity, activity.dl,
-            tb, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+            activity, activity.binding.dl,
+            bindingFragmentCustomer.tb, R.string.navigation_drawer_open, R.string.navigation_drawer_close
         )
-        activity.dl.addDrawerListener(drawerToggle)
+        activity.binding.dl.addDrawerListener(drawerToggle)
         drawerToggle.syncState()
 
         val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(
             activity, RecyclerView.VERTICAL, false
         )
-        rv.layoutManager = layoutManager
-        rv.addItemDecoration(
+        bindingFragmentCustomer.rv.layoutManager = layoutManager
+        bindingFragmentCustomer.rv.addItemDecoration(
             androidx.recyclerview.widget.DividerItemDecoration(
                 activity,
                 androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
             )
         )
 
-        adapter.setupScrollListener(rv)
+        adapter.setupScrollListener(bindingFragmentCustomer.rv)
 
         if (!adapter.hasRetryListener()) {
             adapter.retryListener {
@@ -127,14 +142,15 @@ class CustomerFragment : Fragment() {
             }
         }
 
-        srl.setOnRefreshListener {
+
+        bindingFragmentCustomer.srl.setOnRefreshListener {
             adapter.clear()
             if (!adapter.hasMoreListener()) {
                 adapter.showMore()
                 fetchCustomer()
             }
-            srl.post {
-                srl.isRefreshing = false
+            bindingFragmentCustomer.srl.post {
+                bindingFragmentCustomer.srl.isRefreshing = false
             }
         }
 
@@ -143,7 +159,7 @@ class CustomerFragment : Fragment() {
             fetchCustomer()
         }
 
-        rv.adapter = adapter
+        bindingFragmentCustomer.rv.adapter = adapter
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -160,18 +176,21 @@ class CustomerFragment : Fragment() {
 
     private fun fetchCustomer() {
         Odoo.searchRead(
-            "res.partner", Customer.fields,
+            model = "res.partner", fields = Customer.fields,
+            /*
             when (customerType) {
                 CustomerType.Customer -> {
-                    listOf(listOf("customer", "=", true))
+                    listOf(listOf("customer_rank", ">", 0))
                 }
                 CustomerType.Supplier -> {
-                    listOf(listOf("supplier", "=", true))
+                    listOf(listOf("supplier_rank", ">", 0))
                 }
                 CustomerType.Company -> {
                     listOf(listOf("is_company", "=", true))
                 }
-            }, adapter.rowItemCount, limit, "name ASC"
+            }
+            */
+            domain = listOf(listOf("is_company", "=", true)), offset = adapter.rowItemCount, limit = limit, sort ="name ASC"
         ) {
 
             onSubscribe { disposable ->
