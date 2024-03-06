@@ -1,4 +1,4 @@
-OdooJsonRpcClient
+Odoo-mc1 - Odoo bringout mobile client mc1
 ========
 
 Odoo Json RPC client for Android.
