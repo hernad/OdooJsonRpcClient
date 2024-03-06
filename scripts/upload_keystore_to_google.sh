@@ -1,0 +1,1 @@
+java -jar pepk.jar --keystore=keystore/bringout-android.keystore --alias="bring.out doo sarajevo" --output=output.zip --include-cert --rsa-aes-encryption --encryption-key-path=keystore/encryption_public_key.pem
