@@ -26,7 +26,7 @@
 
     <!--
     <fragment
-            android:name="io.gripxtech.odoojsonrpcclient.core.preferences.SettingsFragment"
+            android:name="ba.out.bring.odoo.mc1.core.preferences.SettingsFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:tag="SettingsFragment"
@@ -37,7 +37,7 @@
             android:id="@+id/fragment_container_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="io.gripxtech.odoojsonrpcclient.core.preferences.SettingsFragment"
+            android:name="ba.out.bring.odoo.mc1.core.preferences.SettingsFragment"
             android:tag="set_tag">
     </androidx.fragment.app.FragmentContainerView>
 

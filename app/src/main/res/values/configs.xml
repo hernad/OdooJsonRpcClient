@@ -31,13 +31,13 @@
     </string-array>
 
     <!-- organization name -->
-    <string name="preference_organization_summary" translatable="false">Kasim Rangwala</string>
+    <string name="preference_organization_summary" translatable="false">bring.out doo</string>
 
     <!-- organization website -->
-    <string name="preference_organization_website" translatable="false">https://github.com/hernad/OdooJsonRpcClient</string>
+    <string name="preference_organization_website" translatable="false">https://github.com/hernad/odoo-mc1</string>
 
     <!-- organization privacy policy -->
-    <string name="preference_privacy_policy_url" translatable="false">https://github.com/hernad/OdooJsonRpcClient/blob/master/LICENSE</string>
+    <string name="preference_privacy_policy_url" translatable="false">https://github.com/hernad/odoo-mc1/blob/master/LICENSE</string>
 
     <!-- organization email -->
     <string name="preference_contact_summary" translatable="false">hernad@bring.out.ba</string>

@@ -8,21 +8,22 @@ apply plugin: 'kotlin-parcelize'
 
 // Create a variable called keystorePropertiesFile, and initialize it to your
 // keystore.properties file, in the rootProject folder.
-def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreReleasePropertiesFile = rootProject.file("keystoreRelease.properties")
 
 // Initialize a new Properties() object called keystoreProperties.
-def keystoreProperties = new Properties()
+def keystoreReleaseProperties = new Properties()
 
 // Load your keystore.properties file into the keystoreProperties object.
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+keystoreReleaseProperties.load(new FileInputStream(keystoreReleasePropertiesFile))
 
 android {
     signingConfigs {
-        config {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
+        release {
+            keyAlias keystoreReleaseProperties['keyAlias']
+            keyPassword keystoreReleaseProperties['keyPassword']
+            storeFile file(keystoreReleaseProperties['storeFile'])
+            storePassword keystoreReleaseProperties['storePassword']
+
         }
     }
 
@@ -38,11 +39,11 @@ android {
 
     compileSdk 34
     defaultConfig {
-        applicationId "io.gripxtech.odoojsonrpcclient"
+        applicationId "ba.out.bring.odoo.mc1"
         minSdkVersion 28
         targetSdkVersion 34
-        versionCode 8
-        versionName "2.001"
+        versionCode 100
+        versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
@@ -60,10 +61,10 @@ android {
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
+            signingConfig signingConfigs.release
         }
         debug {
-            signingConfig signingConfigs.config
+            signingConfig signingConfigs.release
         }
     }
 
@@ -73,9 +74,7 @@ android {
         dataBinding true
     }
 
-    //androidExtensions {
-    //    experimental = true
-    //}
+
     dataBinding {
         enabled true
     }
@@ -87,7 +86,7 @@ android {
     sourceSets {
         androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
-    namespace 'io.gripxtech.odoojsonrpcclient'
+    namespace 'ba.out.bring.odoo.mc1'
 }
 
 dependencies {
@@ -121,4 +120,5 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     androidTestImplementation "android.arch.persistence.room:testing:$room_version"
+    ksp 'com.android.databinding:compiler:3.1.4'
 }

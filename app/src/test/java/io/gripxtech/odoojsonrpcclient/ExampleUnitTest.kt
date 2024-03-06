@@ -1,4 +1,4 @@
-package io.gripxtech.odoojsonrpcclient
+package ba.out.bring.odoo.mc1
 
 import org.junit.Test
 
