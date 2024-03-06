@@ -3,7 +3,7 @@ Odoo-mc1 - Odoo bringout mobile client mc1
 
 Odoo Json RPC client for Android.
 
-This project is developed against **Odoo 10.0 Community Edition** and it's compatible with **Odoo 11.0**. It may not work properly against older versions of Odoo.
+This project is developed against **Odoo 16.0 Community Edition** and it's compatible with **Odoo 16.0**. It may not work properly against older versions of Odoo.
 
 Configure Odoo host address, Project website, Privacy policy and Contact email from [configs.xml](https://github.com/kasim1011/OdooJsonRpcClient/blob/master/app/src/main/res/values/configs.xml)
 
