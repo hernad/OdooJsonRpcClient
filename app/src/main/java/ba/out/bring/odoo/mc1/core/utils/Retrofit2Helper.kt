@@ -96,18 +96,27 @@ class Retrofit2Helper(
             .newBuilder()
             .cookieJar(object : CookieJar {
 
-                private var cookies: MutableList<Cookie>? = Retrofit2Helper.app.cookiePrefs.getCookies()
+                private var cookies: List<Cookie> = Retrofit2Helper.app.cookiePrefs.getCookies()
 
-                override fun saveFromResponse(url: HttpUrl?, cookies: MutableList<Cookie>?) {
-                    if (cookies != null && cookies.isNotEmpty()) {
+                override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
+                    if (cookies.isNotEmpty()) {
                         this.cookies = cookies
                         Odoo.pendingAuthenticateCookies.clear()
                         Odoo.pendingAuthenticateCookies.addAll(cookies)
                     }
                 }
 
-                override fun loadForRequest(url: HttpUrl?): MutableList<Cookie>? =
-                    cookies
+                //override fun loadForRequest(url: HttpUrl?): MutableList<Cookie>? =
+                //    cookies
+
+                override fun loadForRequest(url: HttpUrl): List<Cookie> {
+                    //TODO("Not yet implemented")
+                    return cookies
+                }
+
+                //override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
+                //    TODO("Not yet implemented")
+                //}
             })
             .addInterceptor { chain: Interceptor.Chain? ->
                 writeFile(dateStamp, Context.MODE_PRIVATE)
@@ -115,7 +124,7 @@ class Retrofit2Helper(
 
                 val request = original.newBuilder()
                     .header("User-Agent", android.os.Build.MODEL)
-                    .method(original.method(), original.body())
+                    .method(original.method, original.body)
                     .build()
 
                 chain.proceed(request).also {
