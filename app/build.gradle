@@ -101,7 +101,7 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$glide_version"
     ksp "com.github.bumptech.glide:compiler:$glide_version"
     implementation "com.github.bumptech.glide:okhttp3-integration:$glide_version"
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.10.1'
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
