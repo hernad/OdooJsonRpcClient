@@ -15,7 +15,6 @@ class App : MultiDexApplication() {
 
     companion object {
         var KEY_ACCOUNT_TYPE = "${BuildConfig.APPLICATION_ID}.auth"
-        //var KEY_ACCOUNT_TYPE = "ba.out.bring.odoo.mc1.auth"
 
     }
 

@@ -41,7 +41,6 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 const val RECORD_LIMIT = 10
 
 val gson: Gson by lazy {

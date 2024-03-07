@@ -18,6 +18,9 @@ import ba.out.bring.odoo.mc1.customer.entities.CustomerDao
         /* Add Room Entities here: END */
     ], version = 1, exportSchema = true
 )
+
+// https://developer.android.com/training/data-storage/room
+
 @TypeConverters(AppTypeConverters::class)
 abstract class OdooDatabase : RoomDatabase() {
 

@@ -11,7 +11,6 @@ data class VersionInfoResult(
         @SerializedName("server_serie")
         var serverSerie: String = "",
 
-
         @Expose
         @SerializedName("server_version_info")
         var serverVersionInfo: JsonArray = JsonArray(),

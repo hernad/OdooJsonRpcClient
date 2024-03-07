@@ -1,22 +1,20 @@
-Odoo-mc1 - Odoo bringout mobile client mc1
+Odoo-mc1 - Odoo bring.out mobile client mc1
 ========
 
 Odoo Json RPC client for Android.
 
 This project is developed against **Odoo 16.0 Community Edition** and it's compatible with **Odoo 16.0**. It may not work properly against older versions of Odoo.
 
-Configure Odoo host address, Project website, Privacy policy and Contact email from [configs.xml](https://github.com/kasim1011/OdooJsonRpcClient/blob/master/app/src/main/res/values/configs.xml)
+Configure Odoo host address, Project website, Privacy policy and Contact email from [configs.xml](https://github.com/hernad/odoo-mc1/blob/master/app/src/main/res/values/configs.xml)
 
-Get the Odoo Json-rpc request collection for [Postman](https://github.com/kasim1011/OdooJsonRpcClient/blob/master/OdooJsonRpc.postman_collection.json?raw=true) **(Right Click -> Save Link As... -> OdooJsonRpc.postman_collection.json)**.
+Get the Odoo Json-rpc request collection for [Postman](https://github.com/hernad/odoo-mc1/blob/master/OdooJsonRpc.postman_collection.json?raw=true) **(Right Click -> Save Link As... -> OdooJsonRpc.postman_collection.json)**.
 
-While changing the [`applicationId`](https://github.com/kasim1011/OdooJsonRpcClient/blob/c26446ee93e9321805ab132b6370f9bde9b2631b/app/build.gradle#L29), perform the corresponding changes at [`android:accountType`](https://github.com/kasim1011/OdooJsonRpcClient/blob/c26446ee93e9321805ab132b6370f9bde9b2631b/app/src/main/res/xml/authenticator.xml#L3) inside [authenticator.xml](https://github.com/kasim1011/OdooJsonRpcClient/blob/c26446ee93e9321805ab132b6370f9bde9b2631b/app/src/main/res/xml/authenticator.xml) as well as at [Gson's Proguard Rules](https://github.com/kasim1011/OdooJsonRpcClient/blob/c26446ee93e9321805ab132b6370f9bde9b2631b/app/proguard-rules.pro#L59) inside [proguard-rules.pro](https://github.com/kasim1011/OdooJsonRpcClient/blob/master/app/proguard-rules.pro).
+While changing the [`applicationId`](https://github.com/hernad/odoo-mc1/blob/c26446ee93e9321805ab132b6370f9bde9b2631b/app/build.gradle#L29), perform the corresponding changes at [`android:accountType`](https://github.com/hernad/odoo-mc1/blob/c26446ee93e9321805ab132b6370f9bde9b2631b/app/src/main/res/xml/authenticator.xml#L3) inside [authenticator.xml](https://github.com/hernad/odoo-mc1/blob/c26446ee93e9321805ab132b6370f9bde9b2631b/app/src/main/res/xml/authenticator.xml) as well as at [Gson's Proguard Rules](https://github.com/hernad/odoo-mc1/blob/c26446ee93e9321805ab132b6370f9bde9b2631b/app/proguard-rules.pro#L59) inside [proguard-rules.pro](https://github.com/hernad/odoo-mc1/blob/master/app/proguard-rules.pro).
 
-Update [`tokenKey`](https://github.com/kasim1011/OdooJsonRpcClient/blob/5edf9e5e66916ecbc6c427c90c0a320ddb00d14f/app/src/main/java/io/gripxtech/odoojsonrpcclient/core/utils/AesSecretKey.kt#L17) inside [AesSecretKey.kt
-](https://github.com/kasim1011/OdooJsonRpcClient/blob/master/app/src/main/java/io/gripxtech/odoojsonrpcclient/core/utils/AesSecretKey.kt) as base for performing **encryption / decryption** of user's sensitive information
+Update [`tokenKey`](https://github.com/hernad/odoo-mc1/blob/5edf9e5e66916ecbc6c427c90c0a320ddb00d14f/app/src/main/java/out/ba/bring/odoo/mc1/core/utils/AesSecretKey.kt#L17) inside [AesSecretKey.kt
+](https://github.com/hernad/odoo-mc1/blob/master/app/src/main/java/out/ba/bring/odoo/mc1/core/utils/AesSecretKey.kt) as base for performing **encryption / decryption** of user's sensitive information
 
-Do not hesitate to report [issues](https://github.com/kasim1011/OdooJsonRpcClient/issues) you may find.
 
-Get the **sample APK** from [release](https://github.com/kasim1011/OdooJsonRpcClient/releases) section.
 
 Next Milestone:
 - **Synchronization** and **Persistence** using [Room Persistence Library](https://developer.android.com/topic/libraries/architecture/room)
@@ -266,11 +264,11 @@ SearchRead
 
 Performs a `search()` followed by a `read()`.
 
-- domain: Search domain, see arguments in [`search`](https://github.com/kasim1011/OdooJsonRpcClient#search). Defaults to an empty domain that will match all records.
-- fields: List of fields to read, see `fields` parameter in [`read`](https://github.com/kasim1011/OdooJsonRpcClient#read). Defaults to all fields.
-- offset: Number of records to skip, see `offset` parameter in [`search`](https://github.com/kasim1011/OdooJsonRpcClient#search). Defaults to `0`.
-- limit: Maximum number of records to return, see `limit` parameter in [`search`](https://github.com/kasim1011/OdooJsonRpcClient#search). Defaults to no limit.
-- sort: Columns to sort result, see `sort` parameter in [`search`](https://github.com/kasim1011/OdooJsonRpcClient#search). Defaults to no sort.
+- domain: Search domain, see arguments in [`search`](https://github.com/hernad/odoo-mc1#search). Defaults to an empty domain that will match all records.
+- fields: List of fields to read, see `fields` parameter in [`read`](https://github.com/hernad/odoo-mc1#read). Defaults to all fields.
+- offset: Number of records to skip, see `offset` parameter in [`search`](https://github.com/hernad/odoo-mc1#search). Defaults to `0`.
+- limit: Maximum number of records to return, see `limit` parameter in [`search`](https://github.com/hernad/odoo-mc1#search). Defaults to no limit.
+- sort: Columns to sort result, see `sort` parameter in [`search`](https://github.com/hernad/odoo-mc1#search). Defaults to no sort.
 
 return: List of objects containing the asked fields.
 
@@ -437,12 +435,12 @@ Odoo.nameGet(model = "res.partner", ids = listOf(1, 3)) {
 NameCreate
 ==========
 
-Create a new record by calling [`create`](https://github.com/kasim1011/OdooJsonRpcClient#create) with only one value provided, the display name of the new record.
+Create a new record by calling [`create`](https://github.com/hernad/odoo-mc1#create) with only one value provided, the display name of the new record.
 The new record will be initialized with any default values applicable to this model, or provided through the context. The usual behavior of `create` applies.
 
 - name: display name of the record to create
 
-return: the [`nameGet`](https://github.com/kasim1011/OdooJsonRpcClient#nameget) pair value of the created record
+return: the [`nameGet`](https://github.com/hernad/odoo-mc1#nameget) pair value of the created record
 
 **Request**
 ```kotlin
@@ -488,11 +486,11 @@ NameSearch
 
 Search for records that have a display name matching the given `name` pattern when compared with the given `operator`, while also matching the optional search domain (`args`).
 
-This is used for example to provide suggestions based on a partial value for a relational field. Sometimes be seen as the inverse function of [`nameGet`](https://github.com/kasim1011/OdooJsonRpcClient#nameget), but it is not guaranteed to be.
-This method is equivalent to calling [`search`](https://github.com/kasim1011/OdooJsonRpcClient#search) with a search domain based on `display_name` and then [`nameGet`](https://github.com/kasim1011/OdooJsonRpcClient#nameget) on the result of the search.
+This is used for example to provide suggestions based on a partial value for a relational field. Sometimes be seen as the inverse function of [`nameGet`](https://github.com/hernad/odoo-mc1#nameget), but it is not guaranteed to be.
+This method is equivalent to calling [`search`](https://github.com/hernad/odoo-mc1#search) with a search domain based on `display_name` and then [`nameGet`](https://github.com/hernad/odoo-mc1#nameget) on the result of the search.
 
 - name: the name pattern to match
-- args: optional search domain (see [`search`](https://github.com/kasim1011/OdooJsonRpcClient#search) for syntax), specifying further restrictions
+- args: optional search domain (see [`search`](https://github.com/hernad/odoo-mc1#search) for syntax), specifying further restrictions
 - operator: domain operator for matching `name`, such as `like` or `=`.
 - limit: optional max number of records to return
 
